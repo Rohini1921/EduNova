@@ -1,1 +1,178 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduNova - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 60px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .login-container h2 {
+            text-align: center;
+            color: #24245c;
+            margin-bottom: 20px;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            background: #6256d9;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .login-container button:hover {
+            background: #4035a8;
+        }
+
+        .login-container p {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        #message {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>EduNova</h1>
+    <nav>
+        <a href="index.html">Home</a>
+    </nav>
+</header>
+
+<div class="login-container">
+
+    <h2>Welcome to EduNova</h2>
+
+    <form id="loginForm">
+
+        <input
+            type="text"
+            id="name"
+            placeholder="Full Name (for registration)"
+        >
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter Email"
+            required
+        >
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter Password"
+            required
+        >
+
+        <button type="submit">Login</button>
+
+        <button type="button" id="registerBtn">
+            Create Account
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+    <p>Back to <a href="index.html">Home</a></p>
+
+</div>
+
+<script type="module">
+    import { auth } from "./firebase.js";
+
+    import {
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        updateProfile
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+    const loginForm = document.getElementById("loginForm");
+    const registerBtn = document.getElementById("registerBtn");
+    const message = document.getElementById("message");
+
+    loginForm.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+
+            message.style.color = "green";
+            message.textContent = "Login successful!";
+
+            window.location.href = "dashboard.html";
+
+        } catch(error) {
+            message.style.color = "red";
+            message.textContent = error.message;
+        }
+    });
+
+    registerBtn.addEventListener("click", async function() {
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        if (!name.trim()) {
+            message.textContent = "Please enter your full name.";
+            return;
+        }
+
+        try {
+            const userCredential =
+                await createUserWithEmailAndPassword(
+                    auth, email, password
+                );
+
+            await updateProfile(userCredential.user, {
+                displayName: name
+            });
+
+            message.style.color = "green";
+            message.textContent = "Account created successfully!";
+
+            window.location.href = "dashboard.html";
+
+        } catch(error) {
+            message.style.color = "red";
+            message.textContent = error.message;
+        }
+    });
+</script>
+
+</body>
+</html>
+
