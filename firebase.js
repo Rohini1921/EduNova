@@ -6,7 +6,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth
 import { getFirestore } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCA0Kn3odIxCDJTwNwbN0uRUHV4k79Pfg",
+    apiKey: "AIzaSyCAOKnt3odIxCDJTwNwbN0uRUHV4k79Pfg",
     authDomain: "edunova-53462.firebaseapp.com",
     projectId: "edunova-53462",
     storageBucket: "edunova-53462.firebasestorage.app",
